@@ -1,2 +1,2 @@
-# DynamicEventButtonsData
-Storage for the DynamicEventButtons Geode mod.
+# DynamicEventButtonData
+Storage for the DynamicEventButton Geode mod.
