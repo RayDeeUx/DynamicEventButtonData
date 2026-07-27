@@ -175,6 +175,46 @@
             text-shadow: 1px 1px 1px #000, -1px 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000;
         }
 
+        .link-btn {
+            background: #00d2f6;
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.0);
+            border-radius: 24px;
+            padding: 8px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            text-shadow: 1px 1px 1px #000, -1px 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-decoration: none;
+            line-height: 1.2;
+        }
+
+        .link-btn:hover {
+            background: #33d9ff;
+            transform: scale(1.03);
+            box-shadow: 0 4px 16px rgba(0, 210, 246, 0.4);
+        }
+
+        .link-btn:active {
+            transform: scale(0.97);
+            transition: transform 0.1s ease;
+        }
+
+        .link-btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+            cursor: not-allowed;
+            filter: grayscale(0.6);
+        }
+
         .info-bar {
             display: flex;
             align-items: center;
@@ -305,6 +345,8 @@
 
 <div class="level-name" id="levelNameDisplay"></div>
 
+<button class="link-btn" id="openLinkBtn" title="Open in GDBrowser">Open in GDBrowser</button>
+
 <div class="info-bar">
     <span class="counter" id="counter">0 / 0</span>
 </div>
@@ -328,7 +370,15 @@
             "Space Invaders by Subwoofer", "FUNHOUSE by rafer",
             "Eta Carnis by GloryEX and others", "Stronghold by Debihan",
             "EASTSIDE by vegtam and fJud", "RESONATE by Bpi",
-            "Brave Blue by Glubfuberz", "Blackfire Backfire by kira9999"
+            "Brave Blue by Glubfuberz", "Blackfire Backfire by kira9999",
+            "Moai by SeniorSaturno"
+        ];
+        const levelIDs = [
+            111832753, 112089660, 112204024, 112428194, 112809245,
+            113049620, 113256289, 113409074, 114024868, 114222375,
+            114694142, 115047336, 115867730, 116791791, 118509879,
+            124136398, 125075242, 126094460, 126539075, 128453511,
+            132687104, 138060545, 141525782, 143231051, 145493833
         ];
         const images = [];
         for (let i = 1; i < levelNames.length + 1; i++) {
@@ -344,6 +394,7 @@
         const nextBtn = document.getElementById('nextBtn');
         const counterEl = document.getElementById('counter');
         const levelNameDisplay = document.getElementById('levelNameDisplay');
+        const openLinkBtn = document.getElementById('openLinkBtn');
 
         let isLoading = false;
 
@@ -356,9 +407,11 @@
         function updateLevelName() {
             if (images.length === 0 || currentIndex >= levelNames.length) {
                 levelNameDisplay.textContent = '';
+                openLinkBtn.disabled = true;
                 return;
             }
             levelNameDisplay.textContent = levelNames[currentIndex];
+            openLinkBtn.disabled = false;
         }
 
         function loadImage(index) {
@@ -428,8 +481,14 @@
             loadImage(newIndex);
         }
 
+        function goToGDBrowser() {
+          if (images.length === 0 || currentIndex >= levelNames.length) return;
+          window.open(`https://gdbrowser.com/${encodeURIComponent(levelIDs[currentIndex])}`, '_blank');
+        }
+
         prevBtn.addEventListener('click', goToPrev);
         nextBtn.addEventListener('click', goToNext);
+        openLinkBtn.addEventListener('click', goToGDBrowser);
 
         document.addEventListener('keydown', function(e) {
             if (e.keyCode === 37 || e.keyCode === 65) {
